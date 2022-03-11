@@ -56,12 +56,11 @@ LRESULT APIENTRY WndProc(_In_ HWND hWnd, _In_ UINT Msg, _In_ WPARAM wParam, _In_
 		HBITMAP memBM = CreateCompatibleBitmap(hdc, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top);
 
 		SelectObject(memDC, memBM);
-
 		//отрисовка:
 		// 
 		//Заполнение буфера белым цветом
 		FillRect(memDC, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		//Отрисовка отрезка AB с помощью встроенных функций (красный отрезок)
+
 		showFirstLine(lines[0].getStartPoint(), lines[0].getEndPoint(), memDC);
 		showSecondLine(lines[1].getStartPoint(), lines[1].getEndPoint(), memDC);
 
@@ -157,6 +156,7 @@ LRESULT APIENTRY WndProc(_In_ HWND hWnd, _In_ UINT Msg, _In_ WPARAM wParam, _In_
 		default:
 			break;
 		}
+
 		InvalidateRect(hWnd, NULL, true);
 		UpdateWindow(hWnd);
 
