@@ -29,16 +29,46 @@ void LINE::move(int axis, float speed) {
 }
 
 void LINE::rotate(double angle) {
-	long tempX = end.x;
+
+	float cX, cY;
+	cX = (start.x + end.x) / 2;
+	cY = (start.y + end.y) / 2;
+
+	float tempX = start.x;
+	start.x = (start.x - cX) * cos(-angle) - (start.y - cY) * sin(-angle) + cX;
+	start.y = (tempX - cX) * sin(-angle) + (start.y - cY) * cos(-angle) + cY;
+
+	tempX = end.x;
+	end.x = (end.x - cX) * cos(-angle) - (end.y - cY) * sin(-angle) + cX;
+	end.y = (tempX - cX) * sin(-angle) + (end.y - cY) * cos(-angle) + cY;
+
+	/*
+	float tempX = end.x;
 	end.x = (end.x - start.x) * cos(angle) - (end.y - start.y) * sin(angle) + start.x;
 	end.y = (tempX - start.x) * sin(angle) + (end.y - start.y) * cos(angle) + start.y;
+	*/
 }
 
 void LINE::scale(float scale) {
+	if (!(abs(end.x - start.x) < 1 && abs(end.y - start.y) < 1 && scale < 1)) {
+		scale = ((scale - 1) / 2) + 1;
+
+		float cX, cY;
+		cX = (start.x + end.x) / 2;
+		cY = (start.y + end.y) / 2;
+
+		start.x = (start.x - cX) * scale + cX;
+		start.y = (start.y - cY) * scale + cY;
+
+		end.x = (end.x - cX) * scale + cX;
+		end.y = (end.y - cY) * scale + cY;
+	}
+	/*
 	if (!(abs(end.x - start.x) < 1 && abs(end.y - start.y) < 1 && scale < 1)){
 		end.x = (end.x - start.x) * scale + start.x;
 		end.y = (end.y - start.y) * scale + start.y;
 	}
+	*/
 }
 
 POINT LINE::getStartPoint() {
@@ -62,7 +92,6 @@ void showFirstLine(POINT start, POINT end, HDC hdc) {
 	MoveToEx(hdc, start.x, start.y, NULL);
 	LineTo(hdc, end.x, end.y);
 }
-
 
 void showSecondLine(POINT start, POINT end, HDC hdc) {
 	int signX = (end.x >= start.x ? 1 : -1);
